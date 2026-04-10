@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrandLogiq Leave Request System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #fef2f2 0%, #f3f4f6 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .save-message {
+            background-color: #d1fae5;
+            border: 1px solid #10b981;
+            color: #065f46;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            display: none;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .header {
+            background: linear-gradient(to right, #dc2626, #b91c1c);
+            padding: 30px;
+            color: white;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .title-section i {
+            font-size: 28px;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+        }
+        
+        .manage-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .manage-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .management-panel {
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 30px;
+            display: none;
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .panel-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        
+        .auto-save {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #059669;
+            font-size: 14px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 15px;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .input-group input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+        
+        .add-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .add-btn:hover {
+            background: #b91c1c;
+        }
+        
+        .list-container {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 30px;
+        }
+        
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .list-item:last-child {
+            border-bottom: none;
+        }
+        
+        .list-item:hover {
+            background: #f9fafb;
+        }
+        
+        .delete-btn {
+            color: #dc2626;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        
+        .delete-btn:hover {
+            color: #991b1b;
+        }
+        
+        .lead-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .lead-name {
+            font-weight: 500;
+            color: #1f2937;
+        }
+        
+        .lead-email {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        
+        .form-label i {
+            margin-right: 8px;
+            color: #dc2626;
+            width: 16px;
+        }
+        
+        select, input, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: white;
+        }
+        
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+        
+        .email-input-group {
+            display: flex;
+        }
+        
+        .email-prefix {
+            flex: 1;
+            border-right: none;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        
+        .email-suffix {
+            padding: 12px 16px;
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-left: none;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+            color: #374151;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .cc-info {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+        
+        .date-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 640px) {
+            .date-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .total-days {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            display: none;
+        }
+        
+        .total-days i {
+            color: #dc2626;
+            font-size: 18px;
+        }
+        
+        .total-days span {
+            color: #7f1d1d;
+            font-weight: 600;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(to right, #dc2626, #b91c1c);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4);
+        }
+        
+        .submit-note {
+            font-size: 13px;
+            color: #6b7280;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .info-box {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .info-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+        
+        .info-list {
+            list-style: none;
+        }
+        
+        .info-list li {
+            margin-bottom: 12px;
+            color: #4b5563;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .info-list li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .list-number {
+            font-weight: 700;
+            color: #dc2626;
+            margin-right: 10px;
+            min-width: 20px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #6b7280;
+            font-size: 14px;
+            padding: 20px;
+        }
+        
+        /* Scrollbar styling */
+        .list-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .list-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        .list-container::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        .list-container::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Save Message -->
+        <div class="save-message" id="saveMessage">
+            <i class="fas fa-save"></i>
+            <span id="saveMessageText"></span>
+        </div>
+        
+        <!-- Main Card -->
+        <div class="card">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-content">
+                    <div class="title-section">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h1>Leave Request System</h1>
+                            <div class="subtitle">Submit your leave request to HR</div>
+                        </div>
+                    </div>
+                    <button class="manage-btn" id="manageBtn">
+                        <i class="fas fa-cog"></i>
+                        <span class="desktop-text">Manage</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Management Panel -->
+            <div class="management-panel" id="managementPanel">
+                <div class="panel-header">
+                    <div class="panel-title">Management Panel</div>
+                    <div class="auto-save">
+                        <i class="fas fa-save"></i>
+                        <span>Auto-saved</span>
+                    </div>
+                </div>
+                
+                <!-- Employee Management -->
+                <div class="section">
+                    <div class="section-title">Employees</div>
+                    <div class="input-group">
+                        <input type="text" id="newEmployeeName" placeholder="Enter employee name">
+                        <button class="add-btn" id="addEmployeeBtn">
+                            <i class="fas fa-plus"></i>
+                            <span>Add</span>
+                        </button>
+                    </div>
+                    <div class="list-container" id="employeesList">
+                        <!-- Employees will be added here dynamically -->
+                    </div>
+                </div>
+                
+                <!-- Team Lead Management -->
+                <div class="section">
+                    <div class="section-title">Team Leads</div>
+                    <div class="input-group">
+                        <input type="text" id="newLeadName" placeholder="Name">
+                        <input type="email" id="newLeadEmail" placeholder="email@gmail.com">
+                        <button class="add-btn" id="addTeamLeadBtn">
+                            <i class="fas fa-plus"></i>
+                            <span>Add</span>
+                        </button>
+                    </div>
+                    <div class="list-container" id="teamLeadsList">
+                        <!-- Team leads will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Form -->
+            <div class="form-container">
+                <!-- Employee Name Dropdown -->
+                <div class="form-section">
+                    <div class="form-label">
+                        <i class="fas fa-user"></i>
+                        Employee Name *
+                    </div>
+                    <select id="employeeName">
+                        <option value="">Select your name</option>
+                        <!-- Employee options will be added dynamically -->
+                    </select>
+                </div>
+                
+                <!-- Employee Email -->
+                <div class="form-section">
+                    <div class="form-label">
+                        <i class="fas fa-envelope"></i>
+                        Employee Email *
+                    </div>
+                    <div class="email-input-group">
+                        <input type="text" id="emailPrefix" class="email-prefix" placeholder="yourname">
+                        <div class="email-suffix">@gmail.com</div>
+                    </div>
+                </div>
+                
+                <!-- Team Lead -->
+                <div class="form-section">
+                    <div class="form-label">
+                        <i class="fas fa-user-tie"></i>
+                        Team Lead *
+                    </div>
+                    <select id="teamLead">
+                        <option value="">Select your team lead</option>
+                        <!-- Team lead options will be added dynamically -->
+                    </select>
+                    <div class="cc-info" id="ccInfo"></div>
+                </div>
+                
+                <!-- Leave Type -->
+                <div class="form-section">
+                    <div class="form-label">
+                        <i class="fas fa-file-alt"></i>
+                        Leave Type *
+                    </div>
+                    <select id="leaveType">
+                        <option value="annual">Annual Leave</option>
+                        <option value="sick">Sick Leave</option>
+                        <option value="personal">Personal Leave</option>
+                        <option value="emergency">Emergency Leave</option>
+                        <option value="unpaid">Unpaid Leave</option>
+                        <option value="wfh">Work From Home</option>
+                    </select>
+                </div>
+                
+                <!-- Date Range -->
+                <div class="form-section">
+                    <div class="date-grid">
+                        <div>
+                            <div class="form-label">
+                                <i class="fas fa-calendar"></i>
+                                Start Date *
+                            </div>
+                            <input type="date" id="startDate">
+                        </div>
+                        <div>
+                            <div class="form-label">
+                                <i class="fas fa-calendar"></i>
+                                End Date *
+                            </div>
+                            <input type="date" id="endDate">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Total Days Display -->
+                <div class="total-days" id="totalDaysDisplay">
+                    <i class="fas fa-clock"></i>
+                    <span id="totalDaysText"></span>
+                </div>
+                
+                <!-- Reason -->
+                <div class="form-section">
+                    <div class="form-label">
+                        <i class="fas fa-file-alt"></i>
+                        Reason for Leave *
+                    </div>
+                    <textarea id="reason" placeholder="Please provide details about your leave request..."></textarea>
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="form-section">
+                    <button class="submit-btn" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Leave Request to HR
+                    </button>
+                    <div class="submit-note">
+                        Clicking this button will open Gmail with a pre-filled email to hr@brandlogiq.net
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Info Box -->
+        <div class="info-box">
+            <div class="info-title">How it works:</div>
+            <ol class="info-list">
+                <li>
+                    <span class="list-number">1.</span>
+                    Click the "Manage" button to add or remove employees and team leads (changes are auto-saved)
+                </li>
+                <li>
+                    <span class="list-number">2.</span>
+                    Fill out the leave request form with your details, dates, and reason
+                </li>
+                <li>
+                    <span class="list-number">3.</span>
+                    Click "Send Leave Request to HR" to open a pre-filled email in Gmail
+                </li>
+                <li>
+                    <span class="list-number">4.</span>
+                    Review the email and send it to HR and your team lead (CC'd automatically)
+                </li>
+            </ol>
+        </div>
+        
+        <div class="footer">
+            BrandLogiq Leave Request System &copy; 2023
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Default data
+        const defaultEmployees = [
+            'Surav Shrestha',
+            'Dipesh Mishra',
+            'Sudhanshu Acharya',
+            'Kreesh Suwal',
+            'Abhishek Shrestha',
+            'Savyata Poudel',
+            'Prabin Shrestha',
+            'Ram Hasda',
+            'Binita Khatri',
+            'Palistha Shakya',
+            'Prakriti Adhikari',
+            'Shreeya Basnyat',
+            'Anshu Upreti',
+            'Mamata Karki',
+            'Ritu Shahi',
+            'Rasel Shakya',
+            'Ruby Shah',
+            'Aayam Limbu',
+            'Krishna Shrestha',
+            'Sagar Thapa',
+            'Utsav Subedi',
+            'Sarmila Dhungel',
+            'Arya Pokhrel',
+            'Rojan Shrestha',
+            'Prasansha Bhusal',
+            'Bishesh Shrestha',
+            'Roses Shrestha',
+            'Utsav Singh'
+        ];
+
+        const defaultTeamLeads = [
+            { name: 'Kreesh Suwal', email: 'kreesh@brandlogiq.net' },
+            { name: 'Ritu Shahi', email: 'ritu@brandlogiq.net' },
+            { name: 'Surav Shrestha', email: 'surav@brandlogiq.net' },
+            { name: 'Abhishek Shrestha', email: 'abhishek@brandlogiq.net' },
+            { name: 'Sagar Thapa', email: 'finance@brandlogiq.net' },
+            { name: 'CEO', email: 'ceo@brandlogiq.net' },
+            { name: 'Dipesh Mishra', email: 'dpeshmisra@gmail.com' }
+        ];
+
+        // Load data from localStorage or use defaults
+        let employees = JSON.parse(localStorage.getItem('leaveApp_employees')) || defaultEmployees;
+        let teamLeads = JSON.parse(localStorage.getItem('leaveApp_teamLeads')) || defaultTeamLeads;
+
+        // Form data
+        let formData = {
+            employeeName: '',
+            employeeEmail: '',
+            teamLead: '',
+            leaveType: 'annual',
+            startDate: '',
+            endDate: '',
+            reason: '',
+            totalDays: ''
+        };
+
+        // DOM elements
+        const manageBtn = document.getElementById('manageBtn');
+        const managementPanel = document.getElementById('managementPanel');
+        const saveMessage = document.getElementById('saveMessage');
+        const saveMessageText = document.getElementById('saveMessageText');
+        const employeesList = document.getElementById('employeesList');
+        const teamLeadsList = document.getElementById('teamLeadsList');
+        const employeeSelect = document.getElementById('employeeName');
+        const teamLeadSelect = document.getElementById('teamLead');
+        const ccInfo = document.getElementById('ccInfo');
+        const totalDaysDisplay = document.getElementById('totalDaysDisplay');
+        const totalDaysText = document.getElementById('totalDaysText');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Initialize the app
+        function init() {
+            renderEmployees();
+            renderTeamLeads();
+            populateEmployeeSelect();
+            populateTeamLeadSelect();
+            
+            // Set up event listeners
+            manageBtn.addEventListener('click', toggleManagementPanel);
+            document.getElementById('addEmployeeBtn').addEventListener('click', addEmployee);
+            document.getElementById('addTeamLeadBtn').addEventListener('click', addTeamLead);
+            
+            document.getElementById('newEmployeeName').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') addEmployee();
+            });
+            
+            document.getElementById('newLeadEmail').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') addTeamLead();
+            });
+            
+            employeeSelect.addEventListener('change', function(e) {
+                formData.employeeName = e.target.value;
+                updateEmailFromName();
+            });
+            
+            document.getElementById('emailPrefix').addEventListener('input', function(e) {
+                formData.employeeEmail = e.target.value + '@gmail.com';
+            });
+            
+            teamLeadSelect.addEventListener('change', function(e) {
+                formData.teamLead = e.target.value;
+                updateCcInfo();
+            });
+            
+            document.getElementById('leaveType').addEventListener('change', function(e) {
+                formData.leaveType = e.target.value;
+            });
+            
+            document.getElementById('startDate').addEventListener('change', function(e) {
+                formData.startDate = e.target.value;
+                calculateDays();
+            });
+            
+            document.getElementById('endDate').addEventListener('change', function(e) {
+                formData.endDate = e.target.value;
+                calculateDays();
+            });
+            
+            document.getElementById('reason').addEventListener('input', function(e) {
+                formData.reason = e.target.value;
+            });
+            
+            submitBtn.addEventListener('click', submitForm);
+            
+            // Set today as minimum date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').min = today;
+            document.getElementById('endDate').min = today;
+        }
+
+        // Toggle management panel visibility
+        function toggleManagementPanel() {
+            managementPanel.style.display = managementPanel.style.display === 'block' ? 'none' : 'block';
+            manageBtn.innerHTML = managementPanel.style.display === 'block' 
+                ? '<i class="fas fa-times"></i><span class="desktop-text">Close</span>' 
+                : '<i class="fas fa-cog"></i><span class="desktop-text">Manage</span>';
+        }
+
+        // Show save message
+        function showSaveMessage(message) {
+            saveMessageText.textContent = message;
+            saveMessage.style.display = 'flex';
+            setTimeout(() => {
+                saveMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // Render employees list
+        function renderEmployees() {
+            employeesList.innerHTML = '';
+            employees.forEach(emp => {
+                const div = document.createElement('div');
+                div.className = 'list-item';
+                div.innerHTML = `
+                    <span>${emp}</span>
+                    <button class="delete-btn" onclick="removeEmployee('${emp}')">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                `;
+                employeesList.appendChild(div);
+            });
+            localStorage.setItem('leaveApp_employees', JSON.stringify(employees));
+        }
+
+        // Render team leads list
+        function renderTeamLeads() {
+            teamLeadsList.innerHTML = '';
+            teamLeads.forEach(lead => {
+                const div = document.createElement('div');
+                div.className = 'list-item';
+                div.innerHTML = `
+                    <div class="lead-details">
+                        <div class="lead-name">${lead.name}</div>
+                        <div class="lead-email">${lead.email}</div>
+                    </div>
+                    <button class="delete-btn" onclick="removeTeamLead('${lead.name}')">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                `;
+                teamLeadsList.appendChild(div);
+            });
+            localStorage.setItem('leaveApp_teamLeads', JSON.stringify(teamLeads));
+        }
+
+        // Populate employee select dropdown
+        function populateEmployeeSelect() {
+            employeeSelect.innerHTML = '<option value="">Select your name</option>';
+            employees.forEach(emp => {
+                const option = document.createElement('option');
+                option.value = emp;
+                option.textContent = emp;
+                employeeSelect.appendChild(option);
+            });
+        }
+
+        // Populate team lead select dropdown
+        function populateTeamLeadSelect() {
+            teamLeadSelect.innerHTML = '<option value="">Select your team lead</option>';
+            teamLeads.forEach(lead => {
+                const option = document.createElement('option');
+                option.value = lead.name;
+                option.textContent = lead.name;
+                teamLeadSelect.appendChild(option);
+            });
+        }
+
+        // Add new employee
+        function addEmployee() {
+            const newEmployeeName = document.getElementById('newEmployeeName').value.trim();
+            if (newEmployeeName) {
+                employees.push(newEmployeeName);
+                renderEmployees();
+                populateEmployeeSelect();
+                document.getElementById('newEmployeeName').value = '';
+                showSaveMessage('Employee added successfully!');
+            }
+        }
+
+        // Remove employee
+        function removeEmployee(name) {
+            employees = employees.filter(emp => emp !== name);
+            renderEmployees();
+            populateEmployeeSelect();
+            showSaveMessage('Employee removed successfully!');
+        }
+
+        // Add new team lead
+        function addTeamLead() {
+            const newLeadName = document.getElementById('newLeadName').value.trim();
+            const newLeadEmail = document.getElementById('newLeadEmail').value.trim();
+            
+            if (newLeadName && newLeadEmail) {
+                if (!newLeadEmail.endsWith('@gmail.com')) {
+                    alert('Please use a valid @gmail.com email address');
+                    return;
+                }
+                
+                teamLeads.push({ name: newLeadName, email: newLeadEmail });
+                renderTeamLeads();
+                populateTeamLeadSelect();
+                document.getElementById('newLeadName').value = '';
+                document.getElementById('newLeadEmail').value = '';
+                showSaveMessage('Team lead added successfully!');
+            }
+        }
+
+        // Remove team lead
+        function removeTeamLead(name) {
+            teamLeads = teamLeads.filter(lead => lead.name !== name);
+            renderTeamLeads();
+            populateTeamLeadSelect();
+            showSaveMessage('Team lead removed successfully!');
+        }
+
+        // Update email from name
+        function updateEmailFromName() {
+            if (formData.employeeName) {
+                // Convert name to email format: firstname.lastname
+                const nameParts = formData.employeeName.toLowerCase().split(' ');
+                const emailPrefix = nameParts.join('.');
+                document.getElementById('emailPrefix').value = emailPrefix;
+                formData.employeeEmail = emailPrefix + '@gmail.com';
+            }
+        }
+
+        // Update CC info
+        function updateCcInfo() {
+            if (formData.teamLead) {
+                const selectedLead = teamLeads.find(lead => lead.name === formData.teamLead);
+                if (selectedLead) {
+                    ccInfo.textContent = `CC: ${selectedLead.email}`;
+                } else {
+                    ccInfo.textContent = '';
+                }
+            } else {
+                ccInfo.textContent = '';
+            }
+        }
+
+        // Calculate days between start and end dates
+        function calculateDays() {
+            if (formData.startDate && formData.endDate) {
+                const start = new Date(formData.startDate);
+                const end = new Date(formData.endDate);
+                
+                // Make sure end date is not before start date
+                if (end < start) {
+                    document.getElementById('endDate').value = formData.startDate;
+                    formData.endDate = formData.startDate;
+                }
+                
+                const diffTime = Math.abs(end - start);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                formData.totalDays = diffDays;
+                
+                totalDaysText.textContent = `Total Days: ${formData.totalDays} day(s)`;
+                totalDaysDisplay.style.display = 'flex';
+            } else {
+                totalDaysDisplay.style.display = 'none';
+            }
+        }
+
+        // Submit form
+        function submitForm() {
+            // Get current form values
+            formData.employeeName = employeeSelect.value;
+            formData.employeeEmail = document.getElementById('emailPrefix').value + '@gmail.com';
+            formData.teamLead = teamLeadSelect.value;
+            formData.leaveType = document.getElementById('leaveType').value;
+            formData.startDate = document.getElementById('startDate').value;
+            formData.endDate = document.getElementById('endDate').value;
+            formData.reason = document.getElementById('reason').value;
+            
+            // Validate form
+            if (!formData.employeeName || !formData.employeeEmail || !formData.teamLead ||
+                !formData.startDate || !formData.endDate || !formData.reason) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (!formData.employeeEmail.endsWith('@gmail.com')) {
+                alert('Please use a valid @gmail.com email address');
+                return;
+            }
+            
+            // Find selected team lead
+            const selectedLead = teamLeads.find(lead => lead.name === formData.teamLead);
+            const hrEmail = 'anshu.blq@gmail.com';
+            const ccEmail = selectedLead ? selectedLead.email : '';
+            
+            // Create email subject and body
+            const subject = `Leave Request - ${formData.employeeName} (${formData.startDate} to ${formData.endDate})`;
+            const leaveTypeText = formData.leaveType.charAt(0).toUpperCase() + formData.leaveType.slice(1);
+            
+            const body = `Dear HR Team,
+
+I would like to request a leave of absence with the following details:
+
+Employee Name: ${formData.employeeName}
+Employee Email: ${formData.employeeEmail}
+Team Lead: ${formData.teamLead}
+Leave Type: ${leaveTypeText} Leave
+Start Date: ${formData.startDate}
+End Date: ${formData.endDate}
+Total Days: ${formData.totalDays} day(s)
+
+Reason for Leave:
+${formData.reason}
+
+I would appreciate your approval for this leave request at your earliest convenience.
+
+Thank you for your consideration.
+
+Best regards,
+${formData.employeeName}`;
+            
+            // Create Gmail URL
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${hrEmail}&cc=${ccEmail}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            // Open Gmail in new tab
+            window.open(gmailUrl, '_blank');
+            
+            // Reset form
+            resetForm();
+        }
+
+        // Reset form
+        function resetForm() {
+            employeeSelect.value = '';
+            document.getElementById('emailPrefix').value = '';
+            teamLeadSelect.value = '';
+            document.getElementById('leaveType').value = 'annual';
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            document.getElementById('reason').value = '';
+            totalDaysDisplay.style.display = 'none';
+            ccInfo.textContent = '';
+            
+            // Reset formData object
+            formData = {
+                employeeName: '',
+                employeeEmail: '',
+                teamLead: '',
+                leaveType: 'annual',
+                startDate: '',
+                endDate: '',
+                reason: '',
+                totalDays: ''
+            };
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
