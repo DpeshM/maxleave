@@ -762,7 +762,7 @@
             });
             
             document.getElementById('emailPrefix').addEventListener('input', function(e) {
-                formData.employeeEmail = e.target.value + '@gmail.com';
+                formData.employeeEmail = e.target.value + '@maxmedia.com.np';
             });
             
             teamLeadSelect.addEventListener('change', function(e) {
@@ -920,16 +920,15 @@
             showSaveMessage('Team lead removed successfully!');
         }
 
-        // Update email from name
-        function updateEmailFromName() {
-            if (formData.employeeName) {
-                // Convert name to email format: firstname.lastname
-                const nameParts = formData.employeeName.toLowerCase().split(' ');
-                const emailPrefix = nameParts.join('.');
-                document.getElementById('emailPrefix').value = emailPrefix;
-                formData.employeeEmail = emailPrefix + '@maxmedia.com.np';
-            }
-        }
+       function updateEmailFromName() {
+    if (formData.employeeName) {
+        // Take only first name
+        const firstName = formData.employeeName.toLowerCase().split(' ')[0];
+        
+        document.getElementById('emailPrefix').value = firstName;
+        formData.employeeEmail = firstName + '@maxmedia.com.np';
+    }
+}
 
         // Update CC info
         function updateCcInfo() {
