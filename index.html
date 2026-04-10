@@ -959,11 +959,7 @@
                 return;
             }
 
-            if (!formData.employeeEmail.endsWith('@maxmedia.com.np')) {
-                alert('Please use a valid @maxmedia.com.np email address');
-                return;
-            }
-            
+                        
             // Find selected team lead
             const selectedLead = teamLeads.find(lead => lead.name === formData.teamLead);
             const hrEmail = 'info@maxmedia.com.np';
