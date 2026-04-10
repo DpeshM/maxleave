@@ -85,32 +85,7 @@
             font-size: 14px;
         }
         
-        .manage-btn {
-            background: rgba(255, 255, 255, 0);
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
-        
-        .manage-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .management-panel {
-            background: #f9fafb;
-            border-bottom: 1px solid #e5e7eb;
-            padding: 30px;
-            display: none;
-        }
-        
+               
         .panel-header {
             display: flex;
             justify-content: space-between;
@@ -160,24 +135,7 @@
             box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
         }
         
-        .add-btn {
-            background: #16a34a;
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
-        
-        .add-btn:hover {
-            background: #15803d;
-        }
+             
         
         .list-container {
             background: white;
@@ -204,19 +162,8 @@
             background: #f9fafb;
         }
         
-        .delete-btn {
-            color: #dc2626;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            transition: color 0.2s;
-        }
         
-        .delete-btn:hover {
-            color: #991b1b;
-        }
-        
+                
         .lead-details {
             display: flex;
             flex-direction: column;
@@ -455,14 +402,11 @@
                             <div class="subtitle">Submit your leave request to HR</div>
                         </div>
                     </div>
-                    <button class="manage-btn" id="manageBtn">
-                        <i class="fas fa-cog"></i>
-                        <span class="desktop-text">Manage</span>
-                    </button>
+                    
                 </div>
             </div>
             
-            <!-- Management Panel -->
+            <!-- Management Panel 
             <div class="management-panel" id="managementPanel">
                 <div class="panel-header">
                     <div class="panel-title">Management Panel</div>
@@ -472,7 +416,7 @@
                     </div>
                 </div>
                 
-                <!-- Employee Management -->
+                <!-- Employee Management 
                 <div class="section">
                     <div class="section-title">Employees</div>
                     <div class="input-group">
@@ -482,12 +426,12 @@
                             <span>Add</span>
                         </button>
                     </div>
-                    <div class="list-container" id="employeesList">
-                        <!-- Employees will be added here dynamically -->
+                    <div class="list-container" id="employeesList">-->
+                        <!-- Employees will be added here dynamically 
                     </div>
-                </div>
+                </div>-->
                 
-                <!-- Team Lead Management -->
+                <!-- Team Lead Management 
                 <div class="section">
                     <div class="section-title">Team Leads</div>
                     <div class="input-group">
@@ -498,12 +442,12 @@
                             <span>Add</span>
                         </button>
                     </div>
-                    <div class="list-container" id="teamLeadsList">
-                        <!-- Team leads will be added here dynamically -->
+                   <div class="list-container" id="teamLeadsList">
+                        <!-- Team leads will be added here dynamically
                     </div>
                 </div>
-            </div>
-            
+            </div> -->
+                    
             <!-- Form -->
             <div class="form-container">
                 <!-- Employee Name Dropdown -->
@@ -697,8 +641,7 @@
         };
 
         // DOM elements
-        const manageBtn = document.getElementById('manageBtn');
-        const managementPanel = document.getElementById('managementPanel');
+        
         const saveMessage = document.getElementById('saveMessage');
         const saveMessageText = document.getElementById('saveMessageText');
         const employeesList = document.getElementById('employeesList');
@@ -717,19 +660,7 @@
             populateEmployeeSelect();
             populateTeamLeadSelect();
             
-            // Set up event listeners
-            manageBtn.addEventListener('click', toggleManagementPanel);
-            document.getElementById('addEmployeeBtn').addEventListener('click', addEmployee);
-            document.getElementById('addTeamLeadBtn').addEventListener('click', addTeamLead);
-            
-            document.getElementById('newEmployeeName').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') addEmployee();
-            });
-            
-            document.getElementById('newLeadEmail').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') addTeamLead();
-            });
-            
+                   
             employeeSelect.addEventListener('change', function(e) {
                 formData.employeeName = e.target.value;
                 updateEmailFromName();
@@ -770,14 +701,7 @@
             document.getElementById('endDate').min = today;
         }
 
-        // Toggle management panel visibility
-        function toggleManagementPanel() {
-            managementPanel.style.display = managementPanel.style.display === 'block' ? 'none' : 'block';
-            manageBtn.innerHTML = managementPanel.style.display === 'block' 
-                ? '<i class="fas fa-times"></i><span class="desktop-text">Close</span>' 
-                : '<i class="fas fa-cog"></i><span class="desktop-text">Manage</span>';
-        }
-
+       
         // Show save message
         function showSaveMessage(message) {
             saveMessageText.textContent = message;
@@ -844,54 +768,6 @@
                 option.textContent = lead.name;
                 teamLeadSelect.appendChild(option);
             });
-        }
-
-        // Add new employee
-        function addEmployee() {
-            const newEmployeeName = document.getElementById('newEmployeeName').value.trim();
-            if (newEmployeeName) {
-                employees.push(newEmployeeName);
-                renderEmployees();
-                populateEmployeeSelect();
-                document.getElementById('newEmployeeName').value = '';
-                showSaveMessage('Employee added successfully!');
-            }
-        }
-
-        // Remove employee
-        function removeEmployee(name) {
-            employees = employees.filter(emp => emp !== name);
-            renderEmployees();
-            populateEmployeeSelect();
-            showSaveMessage('Employee removed successfully!');
-        }
-
-        // Add new team lead
-        function addTeamLead() {
-            const newLeadName = document.getElementById('newLeadName').value.trim();
-            const newLeadEmail = document.getElementById('newLeadEmail').value.trim();
-            
-            if (newLeadName && newLeadEmail) {
-                if (!newLeadEmail.endsWith('@gmail.com')) {
-                    alert('Please use a valid @gmail.com email address');
-                    return;
-                }
-                
-                teamLeads.push({ name: newLeadName, email: newLeadEmail });
-                renderTeamLeads();
-                populateTeamLeadSelect();
-                document.getElementById('newLeadName').value = '';
-                document.getElementById('newLeadEmail').value = '';
-                showSaveMessage('Team lead added successfully!');
-            }
-        }
-
-        // Remove team lead
-        function removeTeamLead(name) {
-            teamLeads = teamLeads.filter(lead => lead.name !== name);
-            renderTeamLeads();
-            populateTeamLeadSelect();
-            showSaveMessage('Team lead removed successfully!');
         }
 
         // Update email from name
