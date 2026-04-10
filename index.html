@@ -931,18 +931,18 @@
 }
 
         // Update CC info
-        function updateCcInfo() {
-            if (formData.teamLead) {
-                const selectedLead = teamLeads.find(lead => lead.name === formData.teamLead);
-                if (selectedLead) {
-                    ccInfo.textContent = `CC: ${selectedLead.email}`;
-                } else {
-                    ccInfo.textContent = '';
-                }
-            } else {
-                ccInfo.textContent = '';
-            }
+       function updateCcInfo() {
+    if (formData.teamLead) {
+        const selectedLead = teamLeads.find(lead => lead.name === formData.teamLead);
+        if (selectedLead) {
+            ccInfo.textContent = `CC: ${selectedLead.email}, roshana@maxmedia.com.np`;
+        } else {
+            ccInfo.textContent = '';
         }
+    } else {
+        ccInfo.textContent = '';
+    }
+}
 
         // Calculate days between start and end dates
         function calculateDays() {
@@ -989,7 +989,9 @@
             // Find selected team lead
             const selectedLead = teamLeads.find(lead => lead.name === formData.teamLead);
             const hrEmail = 'info@maxmedia.com.np';
-            const ccEmail = selectedLead ? selectedLead.email : '';
+            const ccEmail = selectedLead 
+            ? `${selectedLead.email},roshana@maxmedia.com.np` 
+            : 'roshana@maxmedia.com.np';
             
             // Create email subject and body
             const subject = `Leave Request - ${formData.employeeName} (${formData.startDate} to ${formData.endDate})`;
