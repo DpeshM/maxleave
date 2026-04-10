@@ -900,7 +900,7 @@
                 const nameParts = formData.employeeName.toLowerCase().split(' ');
                 const emailPrefix = nameParts.join('.');
                 document.getElementById('emailPrefix').value = emailPrefix;
-                formData.employeeEmail = emailPrefix + '@gmail.com';
+                formData.employeeEmail = emailPrefix + '@maxmedia.com.np';
             }
         }
 
@@ -959,14 +959,14 @@
                 return;
             }
 
-            if (!formData.employeeEmail.endsWith('@gmail.com')) {
-                alert('Please use a valid @gmail.com email address');
+            if (!formData.employeeEmail.endsWith('@maxmedia.com.np')) {
+                alert('Please use a valid @maxmedia.com.np email address');
                 return;
             }
             
             // Find selected team lead
             const selectedLead = teamLeads.find(lead => lead.name === formData.teamLead);
-            const hrEmail = 'anshu.blq@gmail.com';
+            const hrEmail = 'info@maxmedia.com.np';
             const ccEmail = selectedLead ? selectedLead.email : '';
             
             // Create email subject and body
